@@ -15,5 +15,5 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     endif()
 endif()
 
-add_subdirectory(src/client)
-add_subdirectory(src/server)
+file(GLOB_RECURSE SRC src/*.cpp)
+add_executable(${PROJECT_NAME} ${SRC})
