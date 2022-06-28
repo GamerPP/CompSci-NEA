@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20.0)
-project(CompSci-NEA VERSION 0.1.0)
+set(MAIN_PROJECT "CompSci-NEA")
+project(${MAIN_PROJECT} VERSION 0.1.0)
 
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
@@ -16,4 +17,5 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
-add_executable(${PROJECT_NAME} ${SRC})
+add_executable(${MAIN_PROJECT} ${SRC})
+add_subdirectory(external)
