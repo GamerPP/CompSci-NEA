@@ -2,20 +2,22 @@ cmake_minimum_required(VERSION 3.20.0)
 set(MAIN_PROJECT "CompSci-NEA")
 project(${MAIN_PROJECT} VERSION 0.1.0)
 
-find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(GIT_SUBMODULE)
-        message(STATUS "Submodule update")
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif()
+find_package(raylib 4.0.0 QUIET)
+if (NOT raylib_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        raylib
+        URL https://github.com/raysan5/raylib/archive/refs/tags/4.0.0.tar.gz
+    )
+    FetchContent_GetProperties(raylib)
+    if (NOT raylib_POPULATED)
+        set(FETCHCONTENT_QUIET NO)
+        FetchContent_Populate(raylib)
+        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
     endif()
 endif()
 
-file(GLOB_RECURSE SRC src/*.cpp)
+file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 add_executable(${MAIN_PROJECT} ${SRC})
-add_subdirectory(external)
+target_link_libraries(${MAIN_PROJECT} raylib)
