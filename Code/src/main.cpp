@@ -1,13 +1,13 @@
 #include <iostream>
 #include <thread>
-#include <map>
+#include <unordered_map>
 #include <raylib.h>
 
 #include "Math.hpp"
 #include "Piece.hpp"
 #include "Pieces/Pieces.hpp"
 
-void LoadTextures(std::map<std::string, Texture2D>& textureCache);
+void LoadTextures(std::unordered_map<std::string, Texture2D>& textureCache);
 void LoadBoard(Piece* board[8][8]);
 
 int main() {
@@ -17,7 +17,7 @@ int main() {
 
 		InitWindow(600, 600, "Chess");
 
-		std::map<std::string, Texture2D> textureCache;
+		std::unordered_map<std::string, Texture2D> textureCache;
 		LoadTextures(textureCache);
 
 		LoadBoard(board);
@@ -74,7 +74,7 @@ exit:
 	return 0;
 }
 
-void LoadTextures(std::map<std::string, Texture2D>& textureCache) {
+void LoadTextures(std::unordered_map<std::string, Texture2D>& textureCache) {
 	Image pawn_white = LoadImage("Resources/pawn_white.png");
 	ImageResize(&pawn_white, 75, 75);
 	textureCache["pawn_white"] = LoadTextureFromImage(pawn_white);
