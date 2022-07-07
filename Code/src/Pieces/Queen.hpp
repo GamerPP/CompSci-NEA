@@ -77,6 +77,7 @@ public:
 
     bool isValidMove(Piece* board[8][8], int startX, int startY, int destX, int destY) override {
         if (destX == startX && destY == startY) return false;
+        
         if (destX == startX) {
             if (destY > startY) {
                 for (int i = startY+1; i < destY; i++) {
@@ -97,33 +98,25 @@ public:
                     if (!board[i][startY]->name.empty()) return false;
                 }
             }
-        } else if (abs(startX - destX) == abs(startY - destY)) {
-            if (startX - destX > 0) { // left
-                if (startY - destY > 0) { // up
-                    for (int i = 1; i < startX - destX; i++) {
-                        if (board[startX-i][startY-i]->name.empty()) continue;
-                        else return false;
-                    }
-                } else { // down
-                    for (int i = 1; i < startX - destX; i++) {
-                        if (board[startX-i][startY+i]->name.empty()) continue;
-                        else return false;
-                    }
+        } else if (abs(destX-startX) == abs(destY-startY)) {
+            if (destX > startX && destY > startY) {
+                for (int i = 1; i < abs(destX-startX); i++) {
+                    if (!board[startX+i][startY+i]->name.empty()) return false;
                 }
-            } else { // right
-                if (startY - destY > 0) { // up
-                    for (int i = 1; i < abs(startX - destX); i++) {
-                        if (board[startX+i][startY-i]->name.empty()) continue;
-                        else return false;
-                    }
-                } else { // down
-                    for (int i = 1; i < abs(startX - destX); i++) {
-                        if (board[startX+i][startY+i]->name.empty()) continue;
-                        else return false;
-                    }
+            } else if (destX > startX && destY < startY) {
+                for (int i = 1; i < abs(destX-startX); i++) {
+                    if (!board[startX+i][startY-i]->name.empty()) return false;
+                }
+            } else if (destX < startX && destY > startY) {
+                for (int i = 1; i < abs(destX-startX); i++) {
+                    if (!board[startX-i][startY+i]->name.empty()) return false;
+                }
+            } else if (destX < startX && destY < startY) {
+                for (int i = 1; i < abs(destX-startX); i++) {
+                    if (!board[startX-i][startY-i]->name.empty()) return false;
                 }
             }
-        }
+        } else return false;
 
         if (board[destX][destY]->name.empty() || board[destX][destY]->name.back() != name.back())
             return true;
